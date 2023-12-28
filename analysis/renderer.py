@@ -165,6 +165,12 @@ if full_config.mapper.optimizer.samples_selection.strategy == 'OGM':
 else:
     ray_sampler = UniformRaySampler()
 
+occupancy_prob_grid = 1 - 1./(1+torch.exp(occupancy_grid))
+# # 遍历张量
+for i in range(0,1):
+        element = occupancy_prob_grid[0][0][i,:,:]
+        save_occ_map(element, f"predicted_occz500_th_{i}.png", render_dir)
+
 cfg = full_config.mapper.optimizer.model_config
 ray_range = cfg.data.ray_range
 

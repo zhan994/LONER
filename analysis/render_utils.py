@@ -125,3 +125,15 @@ def save_depth(depth_fine, fname, render_dir, min_depth=1, max_depth=50):
     img_colored[mask.cpu().numpy()] = np.array([0,0,0,1])
     out_fname = render_dir / fname
     imageio.imwrite(str(out_fname), (img_colored * 255).astype(np.uint8))
+
+def save_occ_map(occ_fine, fname, render_dir, min_depth=0, max_depth=1):
+    img = occ_fine.squeeze().detach()
+    mask = (img >= max_depth)
+    img = torch.clip(img, min_depth, max_depth)
+    # img = (img - img.min()) / (np.percentile(img, 99) - img.min())
+    img = (img - min_depth) / (max_depth - min_depth)
+    img = torch.clip(img, 0, 1).cpu().numpy()
+    out_fname = render_dir / fname
+    img_out = (img * 255).astype(np.uint8)
+    ret,img_th=cv2.threshold(img_out, 127, 255, cv2.THRESH_BINARY_INV)
+    imageio.imwrite(str(out_fname), img_out)
