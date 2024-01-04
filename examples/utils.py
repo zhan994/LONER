@@ -116,6 +116,17 @@ def msg_to_transformation_mat(tf_msg):
     T = torch.vstack((T, torch.Tensor([0, 0, 0, 1])))
     return T.float()
 
+def msg_to_transformation_mat_2D(tf_msg):
+    trans = tf_msg[:3, 3]
+    rot = Rotation.from_matrix(tf_msg[:3,:3]).as_quat()
+    xyz =  torch.as_tensor(trans).reshape(3, 1)
+    quat = torch.Tensor([rot[3],rot[0],rot[1],rot[2]])
+    rotmat = pytorch3d.transforms.quaternion_to_matrix(quat)
+    
+    T = torch.hstack((rotmat, xyz))
+    T = torch.vstack((T, torch.Tensor([0, 0, 0, 1])))
+    return T.float()
+    
 def load_calibration(dataset_family: str, calib_path: str):
     if dataset_family.lower() == "fusion_portable":
         return FusionPortableCalibration(calib_path)
