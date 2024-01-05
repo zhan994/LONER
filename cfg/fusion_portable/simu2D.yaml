@@ -1,0 +1,28 @@
+baseline: defaults.yaml
+dataset: ~/data/fusion_portable/simulation/points2D0104step10FINoise.txt
+calibration: 
+groundtruth_traj: 
+experiment_name: canteen
+dataset_family: fusion_portable
+changes:
+  system:
+    world_cube:
+      compute_from_groundtruth: False
+      trajectory_bounding_box:
+        x: [0, 1200]
+        y: [0, 1200]
+        z: [0, 5]
+  mapper:
+    optimizer:
+      model_config:
+        data:
+          ray_range: &ray_range [1, 110]
+        model:
+          ray_range: *ray_range
+
+meshing_bounding_box:
+  x: [-35, 25]
+  y: [-30,45]
+  z: [-3,20]
+
+lidar_vertical_fov: [-22.5, 22.5]
