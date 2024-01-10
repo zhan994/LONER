@@ -12,22 +12,22 @@ ENV TZ=America
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
 
-RUN useradd -m -l -u ${USER_ID} -s /bin/bash ${USER_NAME} \
-    && usermod -aG video ${USER_NAME} \
-    && export PATH=$PATH:/home/${USER_NAME}/.local/bin
+RUN useradd -m -l -u 1000 -s /bin/bash loner \
+    && usermod -aG video loner \
+    && export PATH=$PATH:/home/loner/.local/bin
 
 # Give them passwordless sudo
-RUN echo "${USER_NAME} ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
+RUN echo "loner ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
 
 # Switch to user to run user-space commands
-USER ${USER_NAME}
-WORKDIR /home/${USER_NAME}
+USER loner
+WORKDIR /home/loner
 
-RUN sudo chown -R ${USER_NAME} /home/${USER_NAME}
-RUN sudo rosdep init && rosdep update
+RUN sudo chown -R loner /home/loner
+# RUN sudo rosdep init && rosdep update
 
 # finish ROS setup
-COPY .bashrc /home/${USER_NAME}/.bashrc
+COPY .bashrc /home/loner/.bashrc
 
 COPY ./entrypoint.sh /entrypoint.sh
 RUN sudo chmod +x /entrypoint.sh
