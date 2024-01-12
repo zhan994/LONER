@@ -2,9 +2,6 @@ ARG BASE_IMAGE=sethgi/loner:base_1.0
 
 FROM ${BASE_IMAGE}
 
-ARG USER_NAME=loner
-ARG USER_ID=1000
-
 ENV DEBIAN_FRONTEND=noninteractive
 ENV TERM=linux
 
